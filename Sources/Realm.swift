@@ -26,10 +26,10 @@ public class AuthRealm : Realm {
 			return try authenticate(credentials: credentials)
 		case let credentials as AccessToken:
 			return try authenticate(credentials: credentials)
-			//		case let credentials as FacebookAccount:
-			//			return try authenticate(credentials: credentials)
-			//		case let credentials as GoogleAccount:
-		//			return try authenticate(credentials: credentials)
+        case let credentials as FacebookAccount:
+            return try authenticate(credentials: credentials)
+        case let credentials as GoogleAccount:
+            return try authenticate(credentials: credentials)
 		default:
 			throw UnsupportedCredentialsError()
 		}
@@ -65,21 +65,21 @@ public class AuthRealm : Realm {
 		}
 	}
 
-	//	private func authenticate(credentials: FacebookAccount) throws -> Account {
-	//		if let account = accounts.filter({$0.facebookID == credentials.uniqueID}).first {
-	//			return account
-	//		} else {
-	//			return try register(credentials: credentials)
-	//		}
-	//	}
-	//
-	//	private func authenticate(credentials: GoogleAccount) throws -> Account {
-	//		if let account = accounts.filter({$0.googleID == credentials.uniqueID}).first {
-	//			return account
-	//		} else {
-	//			return try register(credentials: credentials)
-	//		}
-	//	}
+    private func authenticate(credentials: FacebookAccount) throws -> Account {
+        if let account = accounts.filter({$0.facebookID == credentials.uniqueID}).first {
+            return account
+        } else {
+            return try register(credentials: credentials)
+        }
+    }
+    
+    private func authenticate(credentials: GoogleAccount) throws -> Account {
+        if let account = accounts.filter({$0.googleID == credentials.uniqueID}).first {
+            return account
+        } else {
+            return try register(credentials: credentials)
+        }
+    }
 
 	/// Registers PasswordCredentials against the AuthRealm.
 	public func register(credentials: Credentials) throws -> Account {
@@ -104,16 +104,16 @@ public class AuthRealm : Realm {
 			} catch {
 				throw AccountTakenError()
 			}
-			//		case let credentials as FacebookAccount:
-			//			guard accounts.filter({$0.facebookID == credentials.uniqueID}).first == nil else {
-			//				throw AccountTakenError()
-			//			}
-			//			newAccount.facebookID = credentials.uniqueID
-			//		case let credentials as GoogleAccount:
-			//			guard accounts.filter({$0.googleID == credentials.uniqueID}).first == nil else {
-			//				throw AccountTakenError()
-			//			}
-		//			newAccount.googleID = credentials.uniqueID
+        case let credentials as FacebookAccount:
+            guard accounts.filter({$0.facebookID == credentials.uniqueID}).first == nil else {
+                throw AccountTakenError()
+            }
+            newAccount.facebookID = credentials.uniqueID
+        case let credentials as GoogleAccount:
+            guard accounts.filter({$0.googleID == credentials.uniqueID}).first == nil else {
+                throw AccountTakenError()
+            }
+            newAccount.googleID = credentials.uniqueID
 		default:
 			throw UnsupportedCredentialsError()
 		}
